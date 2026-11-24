@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Démo Tolerio – suivi des étalonnages</title>
+<meta name="description" content="Démonstration interactive de Tolerio : parc d'instruments, échéances d'étalonnage, décision de conformité et export pour l'audit.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F5F7FC;color:#14171F;font-family:Inter,system-ui,sans-serif}
+a{color:#1F4FD8;text-decoration:none}
+button{font-family:inherit}
+.bar{background:#fff;border-bottom:1px solid #ECEEF2}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px;box-sizing:border-box}
+.banner{background:#14171F;color:#fff;font-size:14px;text-align:center;padding:10px 16px}
+.banner a{color:#9DB4FF}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:24px 0}
+.kpi{background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:16px 18px;text-align:left;cursor:pointer;min-height:44px}
+.kpi.on{outline:2px solid #1F4FD8}
+.kpi span{display:block;font-size:13px;color:#5B6272}
+.kpi b{font-family:'Space Grotesk',sans-serif;font-size:32px}
+.panel{background:#fff;border:1px solid #E4E7EC;border-radius:12px;overflow:hidden}
+.tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #ECEEF2}
+.tools input{min-height:44px;border:1px solid #C9CED8;border-radius:8px;padding:0 12px;font-size:15px;min-width:240px;font-family:inherit}
+.btn{min-height:44px;padding:0 16px;border-radius:8px;border:1px solid #C9CED8;background:#fff;font-weight:600;font-size:14px;cursor:pointer;color:#14171F}
+.btn.pri{background:#1F4FD8;border-color:#1F4FD8;color:#fff}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:760px}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#5B6272;text-align:left;padding:10px 16px;background:#FAFBFC}
+td{padding:12px 16px;border-top:1px solid #ECEEF2}
+tr.row{cursor:pointer}tr.row:hover td{background:#F7F9FE}
+.pill{display:inline-flex;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.ok{background:#E3F4EA;color:#1D6B3F}.soon{background:#FFF1DD;color:#8A4B00}.late{background:#FDE5E3;color:#A1261B}.doubt{background:#FFF1DD;color:#8A4B00}
+.drawer{position:fixed;inset:0;background:rgba(20,23,31,.4);display:none;justify-content:flex-end;z-index:10}
+.drawer.open{display:flex}
+.sheet{background:#fff;width:min(480px,100%);height:100%;overflow:auto;padding:24px;box-sizing:border-box}
+.sheet h2{font-family:'Space Grotesk',sans-serif;margin:0 0 4px;font-size:24px}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:14px;margin:16px 0}
+.dl dt{color:#5B6272}.dl dd{margin:0}
+.hist{font-size:13px;width:100%;min-width:0}
+.hist td,.hist th{padding:8px 6px}
+.note{font-size:13px;color:#5B6272;line-height:1.5}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#14171F;color:#fff;padding:12px 18px;border-radius:8px;font-size:14px;display:none;z-index:20;max-width:90%}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="banner">Démo avec des données fictives. <a href="/#inscription">Demander l'accès anticipé</a></div>
+<div class="bar"><div class="wrap" style="display:flex;justify-content:space-between;align-items:center;min-height:64px;gap:12px;flex-wrap:wrap">
+<a href="/" aria-label="Tolerio, accueil" style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px;letter-spacing:-0.03em;color:#14171F;display:flex;align-items:center;gap:10px">
+<svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="11" fill="#1F4FD8"></rect><path d="M10 11H38M10 37H38" stroke="#fff" stroke-opacity=".55" stroke-width="2.6" stroke-linecap="round"></path><path d="M14 24.5L21 30.5L34 17.5" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>tolerio</a>
+<span style="font-size:14px;color:#5B6272">Atelier Démo SARL · Site principal</span>
+</div></div>
+<main class="wrap">
+<div class="kpis" id="kpis"></div>
+<div class="panel">
+<div class="tools">
+<label for="q" style="position:absolute;left:-9999px">Rechercher un instrument</label>
+<input id="q" type="search" placeholder="Rechercher (n°, désignation, emplacement)">
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn" id="exp">Export audit (CSV)</button>
+<button class="btn pri" id="add">+ Instrument</button>
+</div>
+</div>
+<div class="tw"><table>
+<thead><tr><th>N°</th><th>Désignation</th><th>Emplacement</th><th>Périodicité</th><th>Prochain étalonnage</th><th>Dernier résultat</th><th>Statut</th></tr></thead>
+<tbody id="tb"></tbody>
+</table></div>
+</div>
+<p class="note" style="margin:16px 0 40px">Cliquez sur une ligne pour voir la fiche de l'instrument, son historique et la décision de conformité. Les alertes e-mail partent automatiquement 30 jours avant chaque échéance.</p>
+</main>
+<div class="drawer" id="dr" role="dialog" aria-modal="true" aria-labelledby="dt"><div class="sheet" id="sh"></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const today=new Date();today.setHours(0,0,0,0);const shift=today-new Date('2026-11-24T00:00:00');
+const add=(d,m)=>{const x=new Date(d);x.setMonth(x.getMonth()+m);return x};
+const fmt=d=>d.toLocaleDateString('fr-FR');const nf=v=>(+(+v).toPrecision(3)).toLocaleString('fr-FR');
+const raw=[
+['PC-001','Pied à coulisse 0–150 mm','Atelier usinage',12,'2026-02-10',0.02,0.01,0.05,'mm'],
+['PC-002','Pied à coulisse 0–200 mm','Contrôle réception',12,'2025-11-03',0.03,0.01,0.05,'mm'],
+['MI-004','Micromètre 25–50 mm','Atelier usinage',12,'2026-01-15',0.003,0.001,0.004,'mm'],
+['MN-010','Manomètre 0–10 bar','Ligne 2',12,'2025-12-20',0.30,0.10,0.50,'bar'],
+['MN-011','Manomètre 0–16 bar','Ligne 3',12,'2026-06-02',0.45,0.10,0.50,'bar'],
+['TH-021','Sonde Pt100','Four 1',6,'2026-06-18',0.4,0.15,1.0,'°C'],
+['TH-022','Thermomètre de contact','Laboratoire',12,'2025-10-30',0.2,0.1,0.5,'°C'],
+['BA-030','Balance 6 kg','Expédition',12,'2026-03-05',1,0.5,2,'g'],
+['CL-040','Clé dynamométrique 20–100 N·m','Montage',12,'2026-11-28',2.1,0.6,4,'%'],
+['MU-050','Multimètre','Maintenance',24,'2025-01-12',0.15,0.05,0.5,'%'],
+['CA-060','Cale étalon 50 mm','Métrologie',36,'2024-04-08',0.0004,0.0002,0.0012,'mm'],
+['CO-070','Comparateur 0–10 mm','Atelier usinage',12,'2025-12-15',0.012,0.003,0.010,'mm']
+];
+function decide(e,u,emt){const a=Math.abs(e);if(a+u<=emt)return'conforme';if(a-u>emt)return'non conforme';return'doute'}
+let data=raw.map(r=>{const last=new Date(new Date(r[4]+'T00:00:00').getTime()+shift);const next=add(last,r[3]);const days=Math.round((next-today)/864e5);
+const dec=decide(r[5],r[6],r[7]);let st=days<0?'late':days<=30?'soon':'ok';
+return{id:r[0],des:r[1],loc:r[2],per:r[3],last,next,days,e:r[5],u:r[6],emt:r[7],unit:r[8],dec,st}});
+let filter='all';
+const lab={ok:'À jour',soon:'Sous 30 jours',late:'En retard'};
+function kpis(){const c={all:data.length,ok:0,soon:0,late:0};data.forEach(d=>c[d.st]++);
+const items=[['all','Instruments',c.all,'#14171F'],['ok','À jour',c.ok,'#1D6B3F'],['soon','Sous 30 jours',c.soon,'#8A4B00'],['late','En retard',c.late,'#A1261B']];
+document.getElementById('kpis').innerHTML=items.map(([k,l,n,col])=>`<button class="kpi ${filter===k?'on':''}" data-k="${k}" aria-pressed="${filter===k}"><span>${l}</span><b style="color:${col}">${n}</b></button>`).join('');
+document.querySelectorAll('.kpi').forEach(b=>b.onclick=()=>{filter=b.dataset.k;render()})}
+function decPill(d){return d==='conforme'?'<span class="pill ok">Conforme</span>':d==='doute'?'<span class="pill doubt">Zone de doute</span>':'<span class="pill late">Non conforme</span>'}
+function render(){kpis();const q=document.getElementById('q').value.toLowerCase();
+const rows=data.filter(d=>(filter==='all'||d.st===filter)&&(d.id+d.des+d.loc).toLowerCase().includes(q)).sort((a,b)=>a.next-b.next);
+document.getElementById('tb').innerHTML=rows.map(d=>`<tr class="row" tabindex="0" data-id="${d.id}"><td><b>${d.id}</b></td><td>${d.des}</td><td>${d.loc}</td><td>${d.per} mois</td><td>${fmt(d.next)} <span style="color:#5B6272;font-size:12px">(${d.days<0?Math.abs(d.days)+' j de retard':'dans '+d.days+' j'})</span></td><td>${decPill(d.dec)}</td><td><span class="pill ${d.st}">${lab[d.st]}</span></td></tr>`).join('')||'<tr><td colspan="7" style="color:#5B6272">Aucun instrument.</td></tr>';
+document.querySelectorAll('tr.row').forEach(tr=>{tr.onclick=()=>open(tr.dataset.id);tr.onkeydown=e=>{if(e.key==='Enter')open(tr.dataset.id)}})}
+function open(id){const d=data.find(x=>x.id===id);const a=Math.abs(d.e);
+const why=d.dec==='conforme'?`|écart| + U = ${nf(a+d.u)} ≤ EMT ${nf(d.emt)}`:d.dec==='doute'?`|écart| + U = ${nf(a+d.u)} > EMT, mais |écart| − U = ${nf(a-d.u)} ≤ EMT`:`|écart| − U = ${nf(a-d.u)} > EMT ${nf(d.emt)}`;
+const h=[[add(d.last,-2*d.per),a*0.5],[add(d.last,-d.per),a*0.75],[d.last,a]];
+document.getElementById('sh').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:start;gap:12px"><div><div style="font-size:13px;color:#5B6272">${d.id}</div><h2 id="dt">${d.des}</h2></div><button class="btn" id="cl" aria-label="Fermer">✕</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill ${d.st}">${lab[d.st]}</span>${decPill(d.dec)}</div>
+<dl class="dl"><dt>Emplacement</dt><dd>${d.loc}</dd><dt>Périodicité</dt><dd>${d.per} mois</dd><dt>Dernier étalonnage</dt><dd>${fmt(d.last)}</dd><dt>Prochain</dt><dd>${fmt(d.next)}</dd><dt>EMT</dt><dd>± ${nf(d.emt)} ${d.unit}</dd></dl>
+<h3 style="font-size:16px;margin:20px 0 8px">Dernier certificat</h3>
+<dl class="dl"><dt>Écart</dt><dd>${nf(d.e)} ${d.unit}</dd><dt>Incertitude U</dt><dd>${nf(d.u)} ${d.unit}</dd><dt>Décision</dt><dd>${decPill(d.dec)}<div class="note" style="margin-top:6px">${why}</div></dd><dt>Certificat</dt><dd><a href="#" onclick="toast('Dans la vraie version, le PDF du certificat s\\'ouvre ici.');return false">certificat_${d.id}.pdf</a></dd></dl>
+${d.dec==='doute'?`<div style="background:#FFF1DD;border-radius:8px;padding:12px 14px;font-size:14px;margin:12px 0">Action requise : appliquer la règle prévue pour la zone de doute (nouvel étalonnage, ajustage ou périodicité réduite).</div>`:d.dec==='non conforme'?`<div style="background:#FDE5E3;border-radius:8px;padding:12px 14px;font-size:14px;margin:12px 0">Action requise : retirer l'instrument et analyser l'impact sur les mesures réalisées depuis le dernier étalonnage conforme (ISO 9001 § 7.1.5.2).</div>`:''}
+<h3 style="font-size:16px;margin:20px 0 8px">Historique</h3>
+<table class="hist"><tr><th>Date</th><th>|Écart|</th><th>Décision</th></tr>${h.map(([dt,v])=>`<tr><td>${fmt(dt)}</td><td>${nf(v)} ${d.unit}</td><td>${decPill(decide(v,d.u,d.emt))}</td></tr>`).join('')}</table>
+<p class="note">L'historique sert à revoir la périodicité : un écart qui augmente vers l'EMT justifie de raccourcir l'intervalle.</p>
+<button class="btn pri" style="width:100%;margin-top:12px" onclick="toast('Dans la vraie version, vous ajoutez ici le nouveau certificat : la décision est calculée automatiquement.')">Ajouter un certificat</button>`;
+const dr=document.getElementById('dr');dr.classList.add('open');document.getElementById('cl').focus();
+document.getElementById('cl').onclick=close}
+function close(){document.getElementById('dr').classList.remove('open')}
+document.getElementById('dr').onclick=e=>{if(e.target.id==='dr')close()};
+document.getElementById('dr').addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(window._t);window._t=setTimeout(()=>el.style.display='none',3500)}
+document.getElementById('q').oninput=render;
+document.getElementById('add').onclick=()=>toast("Dans la vraie version : ajout d'un instrument, ou import de votre fichier Excel.");
+document.getElementById('exp').onclick=()=>{const rows=[['N°','Désignation','Emplacement','Périodicité (mois)','Dernier étalonnage','Prochain','Écart','U','EMT','Unité','Décision','Statut']].concat(data.map(d=>[d.id,d.des,d.loc,d.per,fmt(d.last),fmt(d.next),d.e,d.u,d.emt,d.unit,d.dec,lab[d.st]]));
+const csv='﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='tolerio-demo-audit.csv';a.click()};
+render();
+</script>
+</body>
+</html>
