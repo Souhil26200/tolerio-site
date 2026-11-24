@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Règle de décision : conforme, non conforme ou zone de doute ? | Tolerio</title>
+<meta name="description" content="Comment décider si un instrument est conforme à partir de l&#x27;écart, de l&#x27;incertitude et de l&#x27;EMT. Exemple chiffré et conduite à tenir.">
+<link rel="canonical" href="https://tolerio.fr/guides/regle-de-decision-conformite.html">
+<meta property="og:title" content="Règle de décision : conforme, non conforme ou zone de doute ?">
+<meta property="og:description" content="Comment décider si un instrument est conforme à partir de l&#x27;écart, de l&#x27;incertitude et de l&#x27;EMT. Exemple chiffré et conduite à tenir.">
+<meta property="og:url" content="https://tolerio.fr/guides/regle-de-decision-conformite.html">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://tolerio.fr/og-image.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Règle de décision : conforme, non conforme ou zone de doute ?","description":"Comment décider si un instrument est conforme à partir de l'écart, de l'incertitude et de l'EMT. Exemple chiffré et conduite à tenir.","datePublished":"2026-11-24","author":{"@type":"Person","name":"Souhil, BTS CIRA"},"publisher":{"@type":"Organization","name":"Tolerio","logo":{"@type":"ImageObject","url":"https://tolerio.fr/og-image.png"}},"mainEntityOfPage":"https://tolerio.fr/guides/regle-de-decision-conformite.html"}</script>
+<style>
+body{margin:0;background:#fff;color:#14171F;font-family:Inter,system-ui,sans-serif}
+a{color:#1F4FD8;text-decoration:none}a:hover{color:#163BA6;text-decoration:underline}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;box-sizing:border-box}
+article{max-width:720px;margin:0 auto;padding:48px 24px 64px;box-sizing:border-box}
+h1{font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1.12;letter-spacing:-.01em;margin:8px 0 16px}
+h2{font-family:'Space Grotesk',sans-serif;font-size:26px;line-height:1.2;margin:40px 0 12px}
+h3{font-size:18px;margin:28px 0 8px}
+p,li{font-size:17px;line-height:1.7;color:#3B4150}
+li{margin:6px 0}
+.eyebrow{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#1F4FD8}
+.lead{font-size:19px;color:#14171F}
+.meta{font-size:14px;color:#5B6272}
+.box{background:#EEF2FE;border-radius:12px;padding:20px 24px;margin:28px 0}
+.box p{margin:0;color:#14171F}
+.cta{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:8px;background:#1F4FD8;color:#fff;font-weight:600}
+.cta:hover{color:#fff;background:#163BA6;text-decoration:none}
+table{border-collapse:collapse;width:100%;margin:20px 0;font-size:15px}
+th,td{border-top:1px solid #E4E7EC;padding:10px 12px;text-align:left;vertical-align:top;color:#3B4150}
+th{color:#14171F;background:#F5F7FC}
+td:first-child,th:first-child{width:40%}
+.tw{overflow-x:auto}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:32px}
+.card{border:1px solid #E4E7EC;border-radius:12px;padding:24px;display:block;color:#14171F}
+.card:hover{border-color:#1F4FD8;text-decoration:none}
+.card h2{font-size:20px;margin:0 0 8px}.card p{font-size:15px;margin:0}
+@media(max-width:860px){.cards{grid-template-columns:1fr}h1{font-size:32px}}
+@media(max-width:640px){.topnav a:not(:last-child){display:none}}
+</style>
+</head>
+<body>
+<header style="border-bottom:1px solid #ECEEF2">
+<div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;min-height:72px">
+<a href="/" aria-label="Tolerio, accueil" style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:26px;letter-spacing:-0.03em;color:#14171F;text-decoration:none;display:flex;align-items:center;gap:10px"><svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="11" fill="#1F4FD8"></rect><path d="M10 11H38M10 37H38" stroke="#fff" stroke-opacity=".55" stroke-width="2.6" stroke-linecap="round"></path><path d="M14 24.5L21 30.5L34 17.5" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path></svg> tolerio</a>
+<nav class="topnav" aria-label="Sections" style="display:flex;flex-wrap:wrap;gap:24px;align-items:center;font-size:15px">
+<a href="/guides/" style="color:#3B4150">Guides</a>
+<a href="/#calculateur" style="color:#3B4150">Calculateur gratuit</a>
+<a href="/#prix" style="color:#3B4150">Prix</a>
+<a href="/#inscription" class="cta" style="font-size:15px">Accès anticipé</a>
+</nav>
+</div>
+</header>
+<main>
+<article>
+<div class="eyebrow">Guide · Conformité</div>
+<h1>Règle de décision : conforme, non conforme ou zone de doute ?</h1>
+<p class="meta">Par Souhil, étudiant en BTS CIRA (contrôle industriel et régulation automatique) · 24 novembre 2026</p>
+<p class="lead">Un certificat d'étalonnage donne une erreur mesurée et une incertitude. Pour dire si l'instrument est conforme, il faut comparer ces valeurs à l'erreur maximale tolérée (EMT), avec une règle claire. Sans règle écrite, deux personnes peuvent prendre deux décisions différentes sur le même certificat.</p>
+
+<h2>Les trois données à réunir</h2>
+<ul>
+<li><strong>L'écart</strong> (ou erreur) : la différence entre ce qu'indique l'instrument et la valeur de référence.</li>
+<li><strong>L'incertitude élargie U</strong> : le doute sur cette mesure, donné par le laboratoire.</li>
+<li><strong>L'EMT</strong> : l'erreur que vous acceptez pour votre usage. Elle vient de vous (ou de votre client), pas du laboratoire.</li>
+</ul>
+
+<h2>La règle avec prise en compte de l'incertitude</h2>
+<div class="tw"><table>
+<tr><th>Situation</th><th>Décision</th></tr>
+<tr><td>|écart| + U ≤ EMT</td><td><strong>Conforme</strong> : même dans le pire cas, l'erreur reste dans la tolérance.</td></tr>
+<tr><td>|écart| − U &gt; EMT</td><td><strong>Non conforme</strong> : même dans le meilleur cas, l'erreur dépasse la tolérance.</td></tr>
+<tr><td>Entre les deux</td><td><strong>Zone de doute</strong> : on ne peut ni prouver la conformité, ni la non-conformité.</td></tr>
+</table></div>
+
+<h3>Exemple</h3>
+<p>Un manomètre a une EMT de ± 0,5 bar. Le certificat indique un écart de 0,3 bar et une incertitude U de 0,1 bar.</p>
+<p>0,3 + 0,1 = 0,4 bar, ce qui est inférieur ou égal à 0,5 bar : l'instrument est <strong>conforme</strong>.</p>
+<p>Avec un écart de 0,45 bar, on obtient 0,55 bar. C'est au-dessus de l'EMT, mais 0,45 − 0,1 = 0,35 bar reste en dessous. L'instrument est en <strong>zone de doute</strong>.</p>
+<p><a class="cta" href="/#calculateur">Tester avec vos valeurs dans le calculateur gratuit</a></p>
+
+<h2>Les autres règles possibles</h2>
+<ul>
+<li><strong>Acceptation simple</strong> (sans bande de garde) : on compare l'écart seul à l'EMT, sans tenir compte de U. C'est plus simple, mais le risque d'accepter un instrument réellement hors tolérance peut aller jusqu'à 50 % près de la limite. C'est acceptable seulement si U est petite devant l'EMT.</li>
+<li><strong>Bande de garde</strong> : on réduit la tolérance d'une marge (souvent liée à U) pour limiter le risque d'accepter à tort. C'est la logique de la règle ci-dessus.</li>
+</ul>
+<p>Le guide <strong>ILAC-G8:09/2019</strong> décrit ces règles et leurs risques. L'<strong>ISO/IEC 17025</strong> (§ 7.1.3 et § 7.8.6) impose aux laboratoires de convenir de la règle avec le client avant de déclarer une conformité. En dimensionnel, l'<strong>ISO 14253-1</strong> fixe une règle par défaut qui tient compte de l'incertitude.</p>
+
+<h2>Que faire en zone de doute ?</h2>
+<ul>
+<li>Appliquer ce que votre procédure prévoit, écrit à l'avance (par exemple : traiter comme non conforme pour les mesures critiques).</li>
+<li>Demander au laboratoire une mesure avec une incertitude plus faible.</li>
+<li>Ajuster ou réparer l'instrument, puis le réétalonner.</li>
+<li>Réduire la périodicité de cet instrument.</li>
+</ul>
+
+<h2>Que faire si l'instrument est non conforme ?</h2>
+<ol>
+<li>Le retirer de l'usage et l'identifier comme tel.</li>
+<li>Analyser l'impact sur les mesures faites depuis le dernier étalonnage conforme (ISO 9001 § 7.1.5.2).</li>
+<li>Décider : ajustage, réparation, déclassement ou réforme.</li>
+<li>Garder la trace de l'analyse et des décisions avec le certificat.</li>
+</ol>
+<div class="box"><p><strong>Votre suivi est encore dans un fichier Excel ?</strong> Tolerio centralise vos instruments, échéances et certificats, vous prévient avant chaque date limite et sort la liste prête pour l'audit. <a href="/#inscription">Demander l'accès anticipé</a>.</p></div>
+<p>À lire aussi : <a href="periodicite-etalonnage.html">comment choisir la périodicité d'étalonnage</a>.</p>
+</article>
+</main>
+<footer style="border-top:1px solid #ECEEF2">
+<div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-top:24px;padding-bottom:32px;font-size:14px;color:#5B6272">
+<span>© 2026 Tolerio</span>
+<span><a href="/guides/" style="color:#5B6272">Guides</a> · <a href="/#mentions" style="color:#5B6272">Mentions légales</a> · <a href="mailto:contact@tolerio.fr" style="color:#5B6272">contact@tolerio.fr</a></span>
+</div>
+</footer>
+</body>
+</html>

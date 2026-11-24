@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tolerio.fr/sitemap.xml
